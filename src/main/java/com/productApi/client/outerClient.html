@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Manager</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 15% 20%, #7c3aed55, transparent 30%),
+                radial-gradient(circle at 85% 80%, #06b6d455, transparent 30%),
+                #0f172a;
+            color: #f8fafc;
+        }
+
+
+
+        header {
+            padding: 35px 40px;
+            background: rgba(15, 23, 42, 0.85);
+            border-bottom: 1px solid #334155;
+        }
+
+        header h1 {
+            max-width: 1100px;
+            margin: auto;
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        header h1::before {
+            content: "📦 ";
+        }
+
+        header p {
+            max-width: 1100px;
+            margin: 8px auto 0;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 330px 1fr;
+            gap: 25px;
+        }
+
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            border-color: #475569;
+            transform: translateY(-2px);
+        }
+
+        .card h2 {
+            font-size: 21px;
+            margin-bottom: 22px;
+        }
+
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #475569;
+            border-radius: 9px;
+            background: #0f172a;
+            color: #f8fafc;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        input:focus {
+            border-color: #a78bfa;
+            box-shadow: 0 0 0 3px #8b5cf633;
+        }
+        select {
+          width: 100%;
+          padding: 12px 13px;
+          border: 1px solid #475569;
+          border-radius: 9px;
+          background: #0f172a;
+          color: #f8fafc;
+          font-size: 14px;
+          outline: none;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+
+          select:focus {
+            border-color: #a78bfa;
+            box-shadow: 0 0 0 3px #8b5cf633;
+           }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+            margin-top: 22px;
+        }
+
+        button {
+            border: none;
+            border-radius: 9px;
+            padding: 12px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .save { background: #8b5cf6; }
+        .update { background: #06b6d4; }
+        .delete { background: #f43f5e; }
+        .consult { background: #f59e0b; }
+        .clear { background: #334155; grid-column: span 2; }
+
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .total {
+            background: #8b5cf622;
+            color: #c4b5fd;
+            border: 1px solid #8b5cf655;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* PRODUCT LIST */
+        #list-product {
+            list-style: none;
+        }
+
+        #list-product li {
+            position: relative;
+            padding: 17px 18px;
+            margin-bottom: 11px;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            background: #172033;
+            font-size: 14px;
+            transition: 0.2s;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        #list-product li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: #8b5cf6;
+        }
+
+        #list-product li:hover {
+            transform: translateX(5px);
+            border-color: #8b5cf6;
+            background: #202c42;
+        }
+
+
+        @media (max-width: 800px) {
+            .content { grid-template-columns: 1fr; }
+            header { padding: 28px 20px; }
+            header h1 { font-size: 28px; }
+        }
+
+        @media (max-width: 500px) {
+            .product-header {
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Product Manager</h1>
+    <p>CRUD Client — HTML, CSS & JavaScript</p>
+</header>
+
+<main>
+    <div class="content">
+
+        <section class="card">
+            <h2>Product</h2>
+
+            <div class="form-group">
+                <label for="id">ID (For Update/Delete/Consult)</label>
+                <input type="text" id="id" placeholder="Auto-generated on save">
+            </div>
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name">
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" step="0.01" id="price">
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Quantity</label>
+                <input type="number" id="amount">
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status">
+                    <option value="Available">Available</option>
+                    <option value="Unavailable">Unavailable</option>
+                </select>
+            </div>
+
+            <div class="buttons">
+                <button class="save" onclick="save()">Save</button>
+                <button class="update" onclick="update()">Update</button>
+                <button class="delete" onclick="deleteProduct()">Delete</button>
+                <button class="consult" onclick="loadConsult()">Consult</button>
+                <button class="clear" onclick="clearFields()">Clear Fields</button>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="product-header">
+                <h2>Product List</h2>
+                <p id="total-product" class="total">Total: 0</p>
+            </div>
+
+            <ul id="list-product"></ul>
+        </section>
+
+    </div>
+</main>
+
+<script>
+    const BASE_URL = 'http://localhost:8080/Product';
+
+    function getProductFromForm() {
+        const name = document.getElementById('name').value;
+        const price = document.getElementById('price').value;
+        const amount = document.getElementById('amount').value;
+        const status = document.getElementById('status').value;
+
+        return {
+            name,
+            price: parseFloat(price) || 0,
+            amount: parseInt(amount) || 0,
+            status
+        };
+    }
+
+    async function listAll() {
+        try {
+            const response = await fetch(BASE_URL);
+            const products = await response.json();
+
+            const list = document.getElementById('list-product');
+            const total = document.getElementById('total-product');
+
+            list.innerHTML = '';
+            let validCount = 0;
+
+            products.forEach(product => {
+                if (!product) return;
+                validCount++;
+
+                const item = document.createElement('li');
+                item.textContent = `ID: ${product.id} | Name: ${product.name} | Price: $${product.price} | Qty: ${product.amount} | Status: ${product.status}`;
+
+
+                item.onclick = () => {
+                    document.getElementById('id').value = product.id;
+                    document.getElementById('name').value = product.name;
+                    document.getElementById('price').value = product.price;
+                    document.getElementById('amount').value = product.amount;
+                    document.getElementById('status').value = product.status;
+                };
+
+                list.appendChild(item);
+            });
+
+            total.textContent = `Total: ${validCount}`;
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    }
+
+    async function save() {
+        const product = getProductFromForm();
+
+        const response = await fetch(BASE_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(product)
+        });
+
+        if (response.ok) {
+            clearFields();
+            listAll();
+        }
+    }
+
+    async function update() {
+        const id = document.getElementById('id').value;
+        if (!id) return;
+
+        const product = getProductFromForm();
+
+        const response = await fetch(`${BASE_URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(product)
+        });
+
+        if (response.ok) {
+            clearFields();
+            listAll();
+        }
+    }
+
+    async function deleteProduct() {
+        const id = document.getElementById('id').value;
+        if (!id) return;
+
+        const response = await fetch(`${BASE_URL}/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            clearFields();
+            listAll();
+        }
+    }
+
+    async function loadConsult() {
+        const id = document.getElementById('id').value;
+        if (!id) return;
+
+        try {
+            const response = await fetch(`${BASE_URL}/${id}`);
+            if (!response.ok) throw new Error('Product not found');
+
+            const product = await response.json();
+
+            document.getElementById('name').value = product.name;
+            document.getElementById('price').value = product.price;
+            document.getElementById('amount').value = product.amount;
+            document.getElementById('status').value = product.status;
+        } catch (error) {
+            console.error('Error fetching product:', error);
+        }
+    }
+
+    function clearFields() {
+        document.getElementById('id').value = '';
+        document.getElementById('name').value = '';
+        document.getElementById('price').value = '';
+        document.getElementById('amount').value = '';
+        document.getElementById('status').value = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', listAll);
+</script>
+
+</body>
+</html>
